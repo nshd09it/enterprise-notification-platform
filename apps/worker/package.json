@@ -1,5 +1,25 @@
 {
   "name": "@notification-platform/worker",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@notification-platform/contracts": "workspace:*",
+    "@notification-platform/database": "workspace:*",
+    "@notification-platform/queue": "workspace:*",
+    "bullmq": "^5.45.2",
+    "dotenv": "^16.4.7",
+    "nodemailer": "^6.10.0",
+    "pino": "^10.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "@types/nodemailer": "^6.4.17",
+    "tsx": "^4.19.3"
+  }
 }

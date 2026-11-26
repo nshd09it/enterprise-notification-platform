@@ -7,10 +7,21 @@
     "node": ">=22.0.0"
   },
   "scripts": {
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "db:generate": "pnpm --filter @notification-platform/database db:generate",
+    "db:migrate": "pnpm --filter @notification-platform/database db:migrate",
+    "db:push": "pnpm --filter @notification-platform/database db:push",
+    "db:seed": "pnpm --filter @notification-platform/database db:seed",
+    "dev:api": "pnpm --filter @notification-platform/api dev",
+    "dev:worker": "pnpm --filter @notification-platform/worker dev",
+    "dev:web": "pnpm --filter @notification-platform/web dev",
+    "build": "pnpm -r build",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "devDependencies": {
+    "dotenv-cli": "^11.1.0",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3"
   }

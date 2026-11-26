@@ -13,7 +13,7 @@ import path from 'path';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-    constructor(private readonly logger: PinoLogger) {}
+    constructor(private readonly logger: PinoLogger<string>) {}
     catch(exception: any, host: ArgumentsHost): void {
         const context = host.switchToHttp();
 

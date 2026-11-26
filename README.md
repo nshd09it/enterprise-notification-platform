@@ -1,75 +1,42 @@
 # Enterprise Notification Platform
 
-A production-style, multi-tenant notification platform built with TypeScript, Node.js, PostgreSQL, Redis, and React.
-
-## Project Goals
-
-Demonstrate practical software engineering concepts:
-
-- Multi-tenant SaaS architecture
-- Secure organization-level authorization
-- REST API development
-- Asynchronous notification delivery
-- Transactional outbox pattern
-- Idempotency and retry mechanisms
-- Provider abstraction
-- Automated testing
-- Docker-based development
-- CI/CD automation
+Full-stack monorepo for reliable multi-channel notification ingestion, queueing, and delivery tracking.
 
 ## Architecture
 
-The platform consists of:
+- **`apps/api`**: NestJS 11 REST API + Swagger docs (`/docs`), Prisma persistence, and BullMQ job enqueueing.
+- **`apps/worker`**: BullMQ worker with exponential backoff retries, Dead Letter Queue (DLQ), delivery attempt logging, and pluggable providers (`Email` via Nodemailer/SMTP, `Webhook` with HMAC-SHA256 signing, `SMS`, and `Push`).
+- **`apps/web`**: React 18 + Vite + TypeScript + Tailwind CSS dashboard for composing notifications, monitoring metrics, and retrying failed deliveries.
+- **`libs/database`**: PostgreSQL + Prisma schema, singleton client, and seed script.
+- **`libs/queue`**: Shared Redis (`ioredis`) and BullMQ queue/DLQ utilities.
+- **`libs/contracts`**: Shared TypeScript interfaces across API, worker, and libraries.
 
-- **API:** Handles authentication, authorization, and notification requests.
-- **Worker:** Processes asynchronous notification delivery.
-- **PostgreSQL:** Stores organizations, users, notifications, and delivery records.
-- **Redis:** Supports background job processing.
-- **Web application:** Provides notification management and operational visibility.
+## Quick Start
 
-## Technology Stack
+1. **Copy environment variables**:
+   ```bash
+   cp .env.example .env
+   ```
 
-- TypeScript
-- Node.js
-- NestJS
-- PostgreSQL
-- Prisma
-- Redis
-- BullMQ
-- React
-- Docker
-- GitHub Actions
+2. **Start PostgreSQL, Redis, and Mailpit (local SMTP UI)**:
+   ```bash
+   pnpm docker:up
+   ```
 
-## Repository Structure
+3. **Install dependencies and set up the database**:
+   ```bash
+   pnpm install
+   pnpm db:generate
+   pnpm db:push
+   pnpm db:seed
+   ```
 
-```text
-apps/
-  api/
-  worker/
-  web/
+4. **Run the API, Worker, and React Frontend** (in separate terminals):
+   ```bash
+   pnpm dev:api      # http://localhost:3001 (Swagger at /docs)
+   pnpm dev:worker   # BullMQ worker consuming 'notifications' queue
+   pnpm dev:web      # http://localhost:5173
+   ```
 
-libs/
-  contracts/
-  domain/
-  database/
-  queue/
-  logger/
-  config/
-
-docs/
-infrastructure/
-```
-
-## Development Status
-
-Initial repository setup in progress.
-
-Features will be marked complete only after implementation and testing.
-
-## Running Locally
-
-Local development setup instructions will be added as infrastructure and application components are implemented.
-
-## Project Type
-
-Independent portfolio demonstration project. It is not a production service or a representation of a previous employer's proprietary implementation.
+5. **Inspect delivered emails locally**:
+   Open Mailpit at `http://localhost:8025`.

@@ -1,5 +1,26 @@
 {
   "name": "@notification-platform/queue",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@notification-platform/contracts": "workspace:*",
+    "bullmq": "^5.45.2",
+    "ioredis": "^5.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.10"
+  }
 }
